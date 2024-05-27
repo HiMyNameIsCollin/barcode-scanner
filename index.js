@@ -14,6 +14,7 @@ const handleBarcode = (result) => {
     const barcode = result.codeResult?.code;
     if (!barcodeCounts[barcode]) {
       barcodeCounts[barcode] = 0; // Initialize the count for this barcode
+      return true;
     }
     barcodeCounts[barcode] += 1; // Increment the count
 
@@ -53,10 +54,11 @@ const onProcessed = (result) => {
     }
 
     if (result.codeResult) {
-      drawingCtx.font = '24px Arial';
-      drawingCtx.fillStyle = 'green';
-      drawingCtx.fillText(result.codeResult.code, 10, 40);
-      handleBarcode(result);
+      if (handleBarcode(result)) {
+        drawingCtx.font = '24px Arial';
+        drawingCtx.fillStyle = 'green';
+        drawingCtx.fillText(result.codeResult.code, 10, 40);
+      }
       return;
     }
 
@@ -72,7 +74,7 @@ const onProcessed = (result) => {
 
     const qrCode = jsQR(imageData.data, imageData.width, imageData.height);
 
-    if (qrCode) {
+    if (qrCode.data) {
       console.log(qrCode);
       window.alert('QR Code detected: ', qrCode.toString());
       console.log('QR Code detected: ', qrCode.data);
@@ -101,13 +103,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
       },
       decoder: {
         readers: [
-          'upc_reader', // UPC-A
-          'upc_e_reader', // UPC-E
-          'ean_reader', // EAN-13
-          'ean_8_reader', // EAN-8
-          'code_39_reader', // Code 39
-          'code_93_reader', // Code 93
-          'code_128_reader', // Code 128
+          'code_128_reader',
+          'ean_reader',
+          'ean_8_reader',
+          'code_39_reader',
+          'code_39_vin_reader',
+          'codabar_reader',
+          'upc_reader',
+          'upc_e_reader',
+          'i2of5_reader',
+          '2of5_reader',
+          'code_93_reader',
         ],
       },
     },
