@@ -5,6 +5,28 @@ const getMedian = (arr) => {
   return arr[half];
 };
 
+const onDetected = (result) => {
+  if (result?.codeResult) {
+    const errors = result.codeResult.decodedCodes
+      .filter((_) => _.error !== undefined)
+      .map((_) => _.error);
+    if (getMedian(errors) < 0.1) {
+      const barcode = result.codeResult?.code;
+      if (!barcodeCounts[barcode]) {
+        barcodeCounts[barcode] = 0; // Initialize the count for this barcode
+      }
+      barcodeCounts[barcode] += 1; // Increment the count
+
+      if (barcodeCounts[barcode] >= 10) {
+        window.alert(`Barcode: ${barcode} is valid!`);
+        barcodeCounts = {}; // Reset the count
+      }
+    } else {
+      console.log('That looks a little sketchy my dude');
+    }
+  }
+};
+
 document.addEventListener('DOMContentLoaded', (event) => {
   Quagga.init(
     {
@@ -20,12 +42,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
       decoder: {
         readers: [
           'upc_reader', // UPC-A
-          //   'upc_e_reader', // UPC-E
-          //   'ean_reader', // EAN-13
-          //   'ean_8_reader', // EAN-8
-          //   'code_39_reader', // Code 39
-          //   'code_93_reader', // Code 93
-          //   'code_128_reader', // Code 128
+          'upc_e_reader', // UPC-E
+          'ean_reader', // EAN-13
+          'ean_8_reader', // EAN-8
+          'code_39_reader', // Code 39
+          'code_93_reader', // Code 93
+          'code_128_reader', // Code 128
         ],
       },
     },
@@ -38,28 +60,72 @@ document.addEventListener('DOMContentLoaded', (event) => {
       Quagga.start();
 
       let barcodeCounts = {};
-      const onDetected = (result) => {
-        if (result?.codeResult) {
-          const errors = result.codeResult.decodedCodes
-            .filter((_) => _.error !== undefined)
-            .map((_) => _.error);
-          if (getMedian(errors) < 0.1) {
-            const barcode = result.codeResult?.code;
-            if (!barcodeCounts[barcode]) {
-              barcodeCounts[barcode] = 0; // Initialize the count for this barcode
-            }
-            barcodeCounts[barcode] += 1; // Increment the count
 
-            if (barcodeCounts[barcode] >= 10) {
-              window.alert(`Barcode: ${barcode} is valid!`);
-              barcodeCounts = {}; // Reset the count
-            }
-          } else {
-            console.log('That looks a little sketchy my dude');
+      Quagga.onDetected(onDetected);
+      Quagga.onProcessed(function (result) {
+        if (result) {
+          const drawingCtx = Quagga.canvas.ctx.overlay,
+            drawingCanvas = Quagga.canvas.dom.overlay;
+
+          if (result.boxes) {
+            drawingCtx.clearRect(
+              0,
+              0,
+              drawingCanvas.width,
+              drawingCanvas.height,
+            );
+            result.boxes
+              .filter(function (box) {
+                return box !== result.box;
+              })
+              .forEach(function (box) {
+                Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, drawingCtx, {
+                  color: 'green',
+                  lineWidth: 2,
+                });
+              });
+          }
+
+          if (result.box) {
+            Quagga.ImageDebug.drawPath(result.box, { x: 0, y: 1 }, drawingCtx, {
+              color: 'blue',
+              lineWidth: 2,
+            });
+          }
+
+          if (result.codeResult) {
+            drawingCtx.font = '24px Arial';
+            drawingCtx.fillStyle = 'green';
+            drawingCtx.fillText(result.codeResult.code, 10, 40);
+          }
+
+          // Capture the frame and scan for QR codes
+          const video = document.querySelector('video');
+          const canvas = document.createElement('canvas');
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          const context = canvas.getContext('2d');
+          context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+          const imageData = context.getImageData(
+            0,
+            0,
+            canvas.width,
+            canvas.height,
+          );
+          const qrCode = jsQR(
+            imageData.data,
+            imageData.width,
+            imageData.height,
+          );
+
+          if (qrCode) {
+            console.log(qrCode);
+            window.alert('QR Code detected: ', qrCode.data);
+            console.log('QR Code detected: ', qrCode.data);
           }
         }
-      };
-      Quagga.onDetected(onDetected);
+      });
     },
   );
 });
