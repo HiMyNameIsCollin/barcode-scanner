@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
       inputStream: {
         name: 'Live',
         type: 'LiveStream',
-        target: document.querySelector('#video'),
+        target: document.querySelector('#scanner'),
         constraints: {
           width: window.innerWidth - 32,
           facingMode: 'environment',
@@ -49,11 +49,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
           }
         }
       };
+      Quagga.onDetected(onDetected);
     },
   );
-
-  Quagga.onDetected(function (data) {
-    console.log('Barcode detected and processed: ', data);
-    alert('Barcode detected: ' + data.codeResult.code);
-  });
 });
