@@ -17,7 +17,7 @@ const handleBarcode = (result) => {
     }
     barcodeCounts[barcode] += 1; // Increment the count
 
-    if (barcodeCounts[barcode] >= 10) {
+    if (barcodeCounts[barcode] > 5) {
       window.alert(`Barcode: ${barcode} is valid!`);
       barcodeCounts = {}; // Reset the count
     }
