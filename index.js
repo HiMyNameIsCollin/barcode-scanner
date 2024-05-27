@@ -27,6 +27,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         console.log(err);
         return;
       }
+      console.log('Init success');
+      Quagga.start();
       let barcodeCounts = {};
       const onDetected = (result) => {
         if (result?.codeResult) {
