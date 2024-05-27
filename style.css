@@ -13,9 +13,18 @@ body{
     height: auto; /* You can set a specific height if needed */
     overflow: hidden; /* Prevents scrollbars */
     position: relative; /* Ensures proper positioning of the scanner */
-    padding: 32px;
-}
 
-video{
+}
+#scanner{
+    position: relative;
+}
+/* video{
     margin: auto;
+} */
+canvas {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
 }

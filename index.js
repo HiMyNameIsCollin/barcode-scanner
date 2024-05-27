@@ -4,6 +4,7 @@ const getMedian = (arr) => {
   if (arr.length % 2 === 0) return arr[half - 1] + arr[half] / 2.0;
   return arr[half];
 };
+let barcodeCounts = {};
 
 const onDetected = (result) => {
   if (result?.codeResult) {
@@ -35,7 +36,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         type: 'LiveStream',
         target: document.querySelector('#scanner'),
         constraints: {
-          width: window.innerWidth - 32,
+          width: window.innerWidth,
           facingMode: 'environment',
         },
       },
@@ -58,8 +59,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
       }
       console.log('Init success');
       Quagga.start();
-
-      let barcodeCounts = {};
 
       Quagga.onDetected(onDetected);
       Quagga.onProcessed(function (result) {
