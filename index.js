@@ -119,8 +119,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
       console.log('Init success');
       Quagga.start();
 
-      Quagga.onDetected(onDetected);
-      // Quagga.onProcessed(onProcessed);
+      // Quagga.onDetected(onDetected);
+      Quagga.onProcessed(onProcessed);
     },
   );
 });
