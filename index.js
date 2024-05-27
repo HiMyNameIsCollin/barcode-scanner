@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
       Quagga.start();
 
       Quagga.onDetected(onDetected);
-      Quagga.onProcessed(function (result) {
+      Quagga.onProcessed((result) => {
         if (result) {
           const drawingCtx = Quagga.canvas.ctx.overlay,
             drawingCanvas = Quagga.canvas.dom.overlay;
@@ -112,6 +112,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             canvas.width,
             canvas.height,
           );
+
           const qrCode = jsQR(
             imageData.data,
             imageData.width,
@@ -120,7 +121,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
           if (qrCode) {
             console.log(qrCode);
-            window.alert('QR Code detected: ', qrCode.data);
+            window.alert('QR Code detected: ', qrCode.toString());
             console.log('QR Code detected: ', qrCode.data);
           }
         }
