@@ -13,12 +13,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
       decoder: {
         readers: [
           'upc_reader', // UPC-A
-          'upc_e_reader', // UPC-E
-          'ean_reader', // EAN-13
-          'ean_8_reader', // EAN-8
-          'code_39_reader', // Code 39
-          'code_93_reader', // Code 93
-          'code_128_reader', // Code 128
+          //   'upc_e_reader', // UPC-E
+          //   'ean_reader', // EAN-13
+          //   'ean_8_reader', // EAN-8
+          //   'code_39_reader', // Code 39
+          //   'code_93_reader', // Code 93
+          //   'code_128_reader', // Code 128
         ],
       },
     },
