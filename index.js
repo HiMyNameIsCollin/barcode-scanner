@@ -12,15 +12,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
       },
       decoder: {
         readers: [
-          'code_128_reader',
-          'ean_reader',
-          'ean_8_reader',
-          'code_39_reader',
-          'code_39_vin_reader',
-          'codabar_reader',
-          'upc_reader',
-          'upc_e_reader',
-          'i2of5_reader',
+          'upc_reader', // UPC-A
+          'upc_e_reader', // UPC-E
+          'ean_reader', // EAN-13
+          'ean_8_reader', // EAN-8
+          'code_39_reader', // Code 39
+          'code_93_reader', // Code 93
+          'code_128_reader', // Code 128
         ],
       },
     },
@@ -29,8 +27,28 @@ document.addEventListener('DOMContentLoaded', (event) => {
         console.log(err);
         return;
       }
-      console.log('Initialization finished. Ready to start');
-      Quagga.start();
+      let barcodeCounts = {};
+      const onDetected = (result) => {
+        if (result?.codeResult) {
+          const errors = result.codeResult.decodedCodes
+            .filter((_) => _.error !== undefined)
+            .map((_) => _.error);
+          if (getMedian(errors) < 0.1) {
+            const barcode = result.codeResult?.code;
+            if (!barcodeCounts[barcode]) {
+              barcodeCounts[barcode] = 0; // Initialize the count for this barcode
+            }
+            barcodeCounts[barcode] += 1; // Increment the count
+
+            if (barcodeCounts[barcode] >= 10) {
+              window.alert(`Barcode: ${barcode} is valid!`);
+              barcodeCounts = {}; // Reset the count
+            }
+          } else {
+            console.log('That looks a little sketchy my dude');
+          }
+        }
+      };
     },
   );
 

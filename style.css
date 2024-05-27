@@ -13,7 +13,7 @@ body{
     height: auto; /* You can set a specific height if needed */
     overflow: hidden; /* Prevents scrollbars */
     position: relative; /* Ensures proper positioning of the scanner */
-    padding: 16px;
+    padding: 32px;
 }
 
 video{
