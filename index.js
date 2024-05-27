@@ -4,9 +4,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
       inputStream: {
         name: 'Live',
         type: 'LiveStream',
-        target: document.querySelector('#scanner-container'),
+        target: document.querySelector('#video'),
         constraints: {
-          width: window.innerWidth,
+          width: window.innerWidth - 32,
           facingMode: 'environment',
         },
       },
