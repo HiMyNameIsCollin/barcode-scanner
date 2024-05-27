@@ -4,7 +4,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
       inputStream: {
         name: 'Live',
         type: 'LiveStream',
-        target: document.querySelector('#video'),
+        target: document.querySelector('#scanner-container'),
+        constraints: {
+          width: window.innerWidth,
+          facingMode: 'environment',
+        },
       },
       decoder: {
         readers: [

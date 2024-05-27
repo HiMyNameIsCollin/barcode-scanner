@@ -8,3 +8,9 @@ body{
     max-width: 100vw;
     min-height: 100vh;
 }
+#scanner-container {
+    width: 100vw; /* 100% of the viewport width */
+    height: auto; /* You can set a specific height if needed */
+    overflow: hidden; /* Prevents scrollbars */
+    position: relative; /* Ensures proper positioning of the scanner */
+}
