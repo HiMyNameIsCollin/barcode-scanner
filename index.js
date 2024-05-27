@@ -101,17 +101,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
       },
       decoder: {
         readers: [
-          'upc_reader',
-          'upc_e_reader',
-          'ean_reader',
-          'ean_8_reader',
-          'code_39_reader',
-          'code_39_vin_reader',
-          'code_93_reader',
-          'code_128_reader',
-          'codabar_reader',
-          'i2of5_reader',
-          '2of5_reader',
+          'upc_reader', // UPC-A
+          'upc_e_reader', // UPC-E
+          'ean_reader', // EAN-13
+          'ean_8_reader', // EAN-8
+          'code_39_reader', // Code 39
+          'code_93_reader', // Code 93
+          'code_128_reader', // Code 128
         ],
       },
     },
